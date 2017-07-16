@@ -315,9 +315,9 @@ uint32_t Swap_(uint32_t value) {
 }
 
 uint64_t Swap_(uint64_t value) {
-    value = (value & 0x00000000ffffffff) << 32 | (value & 0xffffffff00000000) >> 32;
-    value = (value & 0x0000ffff0000ffff) << 16 | (value & 0xffff0000ffff0000) >> 16;
-    value = (value & 0x00ff00ff00ff00ff) << 8  | (value & 0xff00ff00ff00ff00) >> 8;
+    value = (value & 0x00000000ffffffffULL) << 32 | (value & 0xffffffff00000000ULL) >> 32;
+    value = (value & 0x0000ffff0000ffffULL) << 16 | (value & 0xffff0000ffff0000ULL) >> 16;
+    value = (value & 0x00ff00ff00ff00ffULL) << 8  | (value & 0xff00ff00ff00ff00ULL) >> 8;
     return value;
 }
 
@@ -1008,7 +1008,7 @@ int main(int argc, const char *argv[]) {
                     size_t normal((size + 0x1000 - 1) / 0x1000);
                     alloc = Align(alloc + (special + normal) * 0x14, 16);
 
-                    auto *fat_arch(mach_header.GetFatArch());
+                    fat_arch *fat_arch(mach_header.GetFatArch());
                     uint32_t align(fat_arch == NULL ? 0 : source.Swap(fat_arch->align));
                     offset = Align(offset, 1 << align);
 
@@ -1029,14 +1029,14 @@ int main(int argc, const char *argv[]) {
             if (!source.IsFat())
                 fat_arch = NULL;
             else {
-                auto *fat_header(reinterpret_cast<struct fat_header *>(file));
+                fat_header *fat_header(reinterpret_cast<struct fat_header *>(file));
                 fat_header->magic = Swap(FAT_MAGIC);
                 fat_header->nfat_arch = Swap(source.Swap(source->nfat_arch));
                 fat_arch = reinterpret_cast<struct fat_arch *>(fat_header + 1);
             }
 
             _foreach (allocation, allocations) {
-                auto &source(allocation.mach_header_);
+                const FatMachHeader &source(allocation.mach_header_);
 
                 uint32_t align(allocation.size_);
                 align = Align(align, 0x10);
