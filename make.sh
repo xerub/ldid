@@ -22,3 +22,6 @@ flags+=(-I.)
 set -x
 "${flags[@]}" -c -std=c++11 -o ldid.o ldid.cpp
 "${flags[@]}" -o ldid ldid.o -x c lookup2.c -x c sha1.c
+
+"${flags[@]}" -c -std=c++11 -o ldid2.o ldid2.cpp
+"${flags[@]}" -o ldid2 ldid2.o -x c lookup2.c -x c sha1.c -x c sha224-256.c
