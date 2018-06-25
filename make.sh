@@ -2,7 +2,9 @@
 
 set -e
 
-sudo xcode-select --switch /Applications/Xcode-5.1.1.app
+if [ -d /Applications/Xcode-5.1.1.app ]; then
+  sudo xcode-select --switch /Applications/Xcode-5.1.1.app
+fi
 
 if which xcrun &>/dev/null; then
     flags=(xcrun -sdk macosx g++)
