@@ -6,3 +6,5 @@ ldid2.o
 ldid2.deb
 debs
 _
+./ldid
+./ldid2
