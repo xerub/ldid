@@ -68,6 +68,7 @@ struct mach_header {
 #define MH_OBJECT     0x1
 #define MH_EXECUTE    0x2
 #define MH_DYLIB      0x6
+#define MH_DYLINKER   0x7
 #define MH_BUNDLE     0x8
 #define MH_DYLIB_STUB 0x9
 
@@ -449,6 +450,7 @@ class MachHeader :
         load_command_ = (struct load_command *) post;
 
         _assert(
+            Swap(mach_header_->filetype) == MH_DYLINKER ||
             Swap(mach_header_->filetype) == MH_EXECUTE ||
             Swap(mach_header_->filetype) == MH_DYLIB ||
             Swap(mach_header_->filetype) == MH_BUNDLE
