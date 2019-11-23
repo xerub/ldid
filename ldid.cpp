@@ -711,7 +711,7 @@ struct CodeDirectory {
     uint32_t codeLimit;
     uint8_t hashSize;
     uint8_t hashType;
-    uint8_t spare1;
+    uint8_t platform;
     uint8_t pageSize;
     uint32_t spare2;
 } _packed;
@@ -774,6 +774,8 @@ int main(int argc, const char *argv[]) {
     uint32_t flag_CPUType(_not(uint32_t));
     uint32_t flag_CPUSubtype(_not(uint32_t));
 
+    uint32_t platform(0);
+
     const char *flag_I(NULL);
 
     bool timeh(false);
@@ -826,6 +828,13 @@ int main(int argc, const char *argv[]) {
                     _assert(arge == argv[argi] + strlen(argv[argi]));
                 }
             break;
+
+            case 'P': {
+                char *arge;
+                const char *argp = argv[argi] + 2;
+                platform = strtoul(argp, &arge, 0);
+                _assert(arge > argp && *arge == '\0');
+            } break;
 
             case 's':
                 _assert(!flag_S);
@@ -1255,7 +1264,7 @@ int main(int argc, const char *argv[]) {
                 directory->codeLimit = Swap(data);
                 directory->hashSize = 0x14;
                 directory->hashType = 0x01;
-                directory->spare1 = 0x00;
+                directory->platform = platform;
                 directory->pageSize = 0x0c;
                 directory->spare2 = Swap(uint32_t(0));
 
