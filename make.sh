@@ -2,15 +2,11 @@
 
 set -e
 
-if [ -d /Applications/Xcode-5.1.1.app ]; then
-  sudo xcode-select --switch /Applications/Xcode-5.1.1.app
-fi
-
 if which xcrun &>/dev/null; then
     flags=(xcrun -sdk macosx g++)
-    flags+=(-mmacosx-version-min=10.4)
+    flags+=(-mmacosx-version-min=10.9)
 
-    for arch in i386 x86_64; do
+    for arch in x86_64; do
         flags+=(-arch "${arch}")
     done
 else
